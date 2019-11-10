@@ -6,29 +6,25 @@ USE bamazonDB;
 
 CREATE TABLE products (
     item_id INT NOT NULL AUTO_INCREMENT,
-    product_name VARCHAR(100) NOT NULL,
-    department_name VARCHAR(50) NOT NULL,
+    product_name VARCHAR(100) NULL,
+    department_name VARCHAR(50) NULL,
     price DECIMAL(10,2) NULL,
-    -- not sure what (10,2) mean
     stock_quantity INT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (item_id)
 
 );
 
-INSERT INTO products ()
-VALUES ();
 
-INSERT INTO products ()
-VALUES ();
+INSERT INTO products (product_name, department_name, price, stock_quantity)
+VALUES 
+("shirts", "clothes", 11.99, 25),
+("water bottle", "outdoors", 18.99, 20),
+("tent", "outdoors", 89.99, 12),
+("hammocks", "outdoors", 68.99, 8),
+("pants", "clothes", 14.99, 18),
+("gloves", "clothes", 11.99, 25),
+("eyeliner", "beauty", 7.99, 17),
+("foundation", "beauty", 29.99, 15),
+("frisbee", "sports", 9.99, 10),
+("spikeball", "sports", 59.99, 8)
 
-INSERT INTO products ()
-VALUES ();
-
--- INSERT INTO products (flavor, price, quantity)
--- VALUES ("vanilla", 2.50, 100);
-
--- INSERT INTO products (flavor, price, quantity)
--- VALUES ("chocolate", 3.10, 120);
-
--- INSERT INTO products (flavor, price, quantity)
--- VALUES ("strawberry", 3.25, 75);

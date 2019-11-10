@@ -16,11 +16,36 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
 
-    start()
+    displayProducts()
 
 });
 
-function start() {
+function displayProducts() {
+    var query = "Select * FROM products";
+    connection.query(query, function (err, res) {
+        // console.log("--------------");
+
+        if (err) throw err;
+
+        for (var i = 0; i < res.length; i++) {
+            console.log("ID: " + res[i].item_id)
+            console.log("Product Name: " + res[i].product_name)
+            console.log("Price: " + res[i].price)
+
+
+        }
+
+        startShopping()
+
+
+    });
+
+
+}
+
+
+
+function startShopping() {
     inquirer
         .prompt({
             name: "productID",
