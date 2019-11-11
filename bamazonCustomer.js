@@ -21,8 +21,7 @@ connection.connect(function (err) {
 });
 
 function displayProducts() {
-    var query = "Select * FROM products";
-    connection.query(query, function (err, res) {
+    connection.query("Select * FROM products", function (err, res) {
         // console.log("--------------");
 
         if (err) throw err;
@@ -47,26 +46,58 @@ function displayProducts() {
 
 function startShopping() {
     inquirer
-        .prompt({
-            name: "productID",
-            type: "list",
-            message: "Which ID of product would you like to buy?",
-            choices: ["PLACE", "HOLDER", "EXIT"]
+        .prompt([{
+                name: "productID",
+                type: "input",
+                message: "Which product ID would you like to purchase?",
+                // choices: ["PLACE", "HOLDER", "EXIT"]
 
-        })
+            },
+
+            {
+                name: "units",
+                type: "input",
+                message: "How many units of product would you to purchase?",
+
+            },
+
+
+        ])
 
         .then(function (answer) {
 
-            if (answer.productID === "PLACE") {
-                // function
-            } else if (answer.productID === "HOLDER") {
-                // function
+            connection.query("Select * FROM products WHERE ?", {
+                item_id: answer.productID
+            }, function (err, res) {
+                if (err) throw err;
 
-            } else {
-                connection.end();
-            }
+                if (res[0].stock_quantity >= answer.units) {
+                    // purchaseItem function
+                } else {
+
+                    console.log("Insufficient quantity!"),
+
+                        connection.end();
+
+
+                }
+
+
+
+            });
+
+            // if (answer.productID === "PLACE") {
+            //     // function
+            // } else if (answer.productID === "HOLDER") {
+            //     // function
+
+            // } else {
+            //     connection.end();
+            // }
 
 
         });
 
+
 }
+
