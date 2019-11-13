@@ -65,7 +65,7 @@ function startShopping() {
             {
                 name: "units",
                 type: "input",
-                message: "How many would you to purchase?",
+                message: "How many would you like to purchase?",
 
             },
 
@@ -89,9 +89,10 @@ function startShopping() {
 
                 } else {
 
-                    console.log("Insufficient quantity!"),
+                    console.log("Insufficient quantity!")
 
-                        connection.end();
+                    startShopping()
+                    // connection.end();
 
 
                 }
@@ -116,27 +117,33 @@ function startShopping() {
 }
 
 function purchaseItem(answer) {
-    // console.log("answer: ", answer);
+
 
     connection.query("Select * FROM products WHERE ?", {
             item_id: answer.productID
         },
         function (err, res) {
             if (err) throw err;
-            // console.log("Response: Array", res[0]);
-            // console.log("Response: not Array", res);
-            // console.log("Response: ", res.stock_quantity);
-
-            var current_quantity = res[0].stock_quantity;
-            console.log("Current quantity in stock: ", current_quantity);
-
-            // console.log(res.price)
 
 
-            // console.log(res[0])
+            var currentQuantity = res[0].stock_quantity;
+            console.log("Available quantity: ", currentQuantity);
 
+            var userQuantity = answer.units;
+            console.log("Quantity in cart: ", userQuantity);
 
-        })
+            var remainingQuantity = currentQuantity - userQuantity;
+            console.log("Remaining Quantity: ", remainingQuantity)
+
+            var priceItem = res[0].price;
+            console.log("Price: ", priceItem)
+
+            var finalPrice = userQuantity * priceItem;
+            console.log("Total:" , finalPrice)
+
+            connection.end();
+
+        });
 
 
 
