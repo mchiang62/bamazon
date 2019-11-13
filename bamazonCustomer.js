@@ -23,7 +23,7 @@ connection.connect(function (err) {
 
 function displayProducts() {
     connection.query("Select * FROM products", function (err, res) {
-        // console.log("--------------"); callback function after query, need this result- this func gets called when query is done
+        // callback function after query, need this result- this func gets called when query is done
         // res = array
 
         // console.log(res)
@@ -58,7 +58,6 @@ function startShopping() {
                 name: "productID",
                 type: "input",
                 message: "Which product ID would you like to purchase?",
-                // choices: ["PLACE", "HOLDER", "EXIT"]
 
             },
 
@@ -81,8 +80,6 @@ function startShopping() {
             }, function (err, res) {
                 if (err) throw err;
 
-                // console.log(res)
-                // console.log(res[0].stock_quantity);
 
                 if (res[0].stock_quantity >= answer.units) {
                     purchaseItem(answer)
@@ -92,7 +89,6 @@ function startShopping() {
                     console.log("Insufficient quantity!")
 
                     startShopping()
-                    // connection.end();
 
 
                 }
@@ -100,15 +96,6 @@ function startShopping() {
 
 
             });
-
-            // if (answer.productID === "PLACE") {
-            //     // function
-            // } else if (answer.productID === "HOLDER") {
-            //     // function
-
-            // } else {
-            //     connection.end();
-            // }
 
 
         });
@@ -127,19 +114,43 @@ function purchaseItem(answer) {
 
 
             var currentQuantity = res[0].stock_quantity;
-            console.log("Available quantity: ", currentQuantity);
+            // console.log("Available quantity: ", currentQuantity);
 
             var userQuantity = answer.units;
             console.log("Quantity in cart: ", userQuantity);
 
-            var remainingQuantity = currentQuantity - userQuantity;
-            console.log("Remaining Quantity: ", remainingQuantity)
-
             var priceItem = res[0].price;
             console.log("Price: ", priceItem)
 
+
+            var remainingQuantity = currentQuantity - userQuantity;
             var finalPrice = userQuantity * priceItem;
-            console.log("Total:" , finalPrice)
+
+            if (currentQuantity > answer.units) {
+
+
+                console.log("Remaining Quantity: ", remainingQuantity)
+                console.log("Total Cost:", finalPrice);
+
+                connection.query("UPDATE products SET stock_quantity=? WHERE item_id=?",
+                    [remainingQuantity, answer.productID],
+                    function (err, res) {
+                        console.table(res);
+                    });
+
+                connection.query("SELECT * FROM products", function (err, res) {
+
+                    console.log("Updated Inventory: ");
+                    console.log("------------------------------- \n");
+                    console.table(res);
+                });
+
+            } else {
+                console.log("Insufficient Amount!");
+            }
+
+
+
 
             connection.end();
 
